@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
 
 def crop_image(config:dict, img:Image):
@@ -9,7 +9,9 @@ def crop_image(config:dict, img:Image):
 
     oimg = img
     img = img.convert("L")
-    mat = np.array(img)
+    bimg = img.filter(ImageFilter.GaussianBlur(5))
+    #bimg.show("Blurred Image for Cropping")
+    mat = np.array(bimg)
     
     #get brightest pixel per row/col
     max_x = np.max(mat,axis=0)
@@ -42,10 +44,10 @@ def crop_image(config:dict, img:Image):
 
     if None in croptup:
         logger.warn("could not find thresh")
-        return img
+        return oimg
     if right <= left or bot <= top:
         logger.warn("invalid edges")
-        return img
+        return oimg
     
     return oimg.crop(croptup)
 
