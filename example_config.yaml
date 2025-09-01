@@ -6,3 +6,5 @@ printer:
     width: 3
     gap: 0.5
     dpu: 100
+scanner:
+  threshold: 25

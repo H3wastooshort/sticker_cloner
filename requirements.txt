@@ -2,3 +2,4 @@ python-sane==2.*
 Pillow==10.1.*
 PyYAML==6.*
 zebra==0.2
+numpy==2.3.*

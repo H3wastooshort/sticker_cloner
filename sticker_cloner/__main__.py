@@ -4,6 +4,7 @@ logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
 
 from .scanner import ScannerInput
 from .printer import ZebraOutput
+from .crop import crop_image
 
 from PIL import Image
 import yaml
@@ -17,6 +18,8 @@ def from_file(path):
     po = ZebraOutput.from_config(config.get("printer",{}))
     img = Image.open(path)
     img.show("Input Image")
+    img = crop_image(config.get("scanner",{}),img)
+    img.show("Cropped Image")
     img = po.adjust_image(img)
     img.show("Processed Image")
     po.print_image(img,1)

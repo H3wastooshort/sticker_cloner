@@ -2,7 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from zebra import Zebra
-from PIL import Image
+from PIL import Image, ImageEnhance
+import numpy as np
 
 class ZebraOutput:
     def __init__(self,printer:Zebra,dot_width:int,dot_height:int):
@@ -43,8 +44,6 @@ class ZebraOutput:
         return c(z,w,h)
     
     def adjust_image(self,img:Image):
-        #border removal done by scanner.py already
-
         #rotate for maximum sticker area
         printer_aspect = self.__width > self.__height
         img_aspect = img.width > img.height
@@ -71,6 +70,21 @@ class ZebraOutput:
         hd = int((h8 - img.height) / 2)
         img8.paste(img,(wd,hd))
         img=img8
+
+        #adjust contrast
+        img=img.convert("L")
+        mat = np.array(img)
+        low = np.min(mat)
+        hi  = np.max(mat)
+        dif = hi - low
+        mul = 255 / dif
+
+        mat = mat - low #remove offset
+        mat = mat * mul #maximize range
+
+        img=Image.fromarray(mat)
+
+        #img.show("Contrast-adjusted image")
 
         #convert to 1bit
         img=img.convert("1")
