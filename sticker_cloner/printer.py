@@ -65,7 +65,7 @@ class ZebraOutput:
         w8 = img.width + 8 - (img.width%8)
         h8 = img.height
         #make image of printer size
-        img8 = Image.Image((w8,h8))
+        img8 = Image.new(img.mode, (w8,h8))
         #paste scanned image centered
         wd = int((w8 - img.width) / 2)
         hd = int((h8 - img.height) / 2)
@@ -73,12 +73,11 @@ class ZebraOutput:
         img=img8
 
         #convert to 1bit
-        img=img.convert("1",Image.Dither.FLOYDSTEINBERG)
+        img=img.convert("1")
         
         return img
     
     def print_image(self,img:Image,qty:int):
         assert img.width%8 == 0
-        assert img.height%8 == 0
         assert qty < 100
         self.__printer.print_graphic(0, 0, img.width, img.height, img.tobytes(), qty)

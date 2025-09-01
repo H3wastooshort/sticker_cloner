@@ -11,6 +11,7 @@ class ScannerInput:
     def load_from_scanner(self,wait_for_document=False):
         def scan_img():
             try:
+                self.__scanner.cancel()
                 self.__scanner.start()
                 return self.__scanner.snap(False)
             except sane._sane.error as e:
