@@ -17,9 +17,9 @@ assert type(config) == dict
 def from_file(path):
     po = ZebraOutput.from_config(config.get("printer",{}))
     img = Image.open(path)
-    img.show("Input Image")
+    #img.show("Input Image")
     img = crop_image(config.get("scanner",{}),img)
-    img.show("Cropped Image")
+    #img.show("Cropped Image")
     img = po.adjust_image(img)
     img.show("Processed Image")
     po.print_image(img,1)
