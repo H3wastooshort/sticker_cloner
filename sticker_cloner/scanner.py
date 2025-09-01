@@ -3,7 +3,6 @@ logger = logging.getLogger(__name__)
 
 import sane
 from PIL import Image
-from .core import load_pil
 from time import sleep
 
 class ScannerInput:
@@ -13,11 +12,17 @@ class ScannerInput:
         def scan_img():
             try:
                 self.__scanner.start()
-                return self.__scanner.snap(True)
+                return self.__scanner.snap(False)
             except sane._sane.error as e:
                 if str(e) == 'Document feeder out of documents':
                     return None
+                #if str(e) == 'Device busy':
+                #    logger.warn("Scanner busy! Cancling job and retrying!")
+                #    self.__scanner.cancel()
+                #    sleep(3)
+                #    return scan_img()
                 else:
+                    self.__scanner.close()
                     raise
         
         img=scan_img()
@@ -26,7 +31,6 @@ class ScannerInput:
             sleep(1)
             img=scan_img()
         if img:
-            img=img.rotate(180)
             logger.info(f"aquired {img.mode} image of size {img.size}")
         else:
             logger.error("no document in ADF")
@@ -44,7 +48,9 @@ class ScannerInput:
             dev=sane.open(dev)
         else:
             logger.warn(f"no scanner device specified, falling back to 1st available")
+            logger.info("looking for scanners...")
             devices = sane.get_devices()
+            logger.debug(str(devices))
             dev = sane.open(devices[0][0])
             logger.warn(f"selected {dev.sane_signature}")
         try:
