@@ -17,11 +17,11 @@ class ScannerInput:
             except sane._sane.error as e:
                 if str(e) == 'Document feeder out of documents':
                     return None
-                #if str(e) == 'Device busy':
-                #    logger.warn("Scanner busy! Cancling job and retrying!")
-                #    self.__scanner.cancel()
+                if str(e) == 'Device busy':
+                    logger.warn("Scanner busy! Cancling job and retrying!")
+                    self.__scanner.cancel()
                 #    sleep(3)
-                #    return scan_img()
+                    return scan_img()
                 else:
                     self.__scanner.close()
                     raise
@@ -40,7 +40,7 @@ class ScannerInput:
     def from_config(c, config=dict()):
         dev=config.get("device", None)
         dpi=config.get("dpi",800)
-        mode=config.get("mode","color")
+        mode=config.get("mode","Gray")
         depth=config.get("depth",8)
         
         logger.debug("init SANE...")
