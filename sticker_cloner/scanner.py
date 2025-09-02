@@ -10,21 +10,21 @@ class ScannerInput:
         self.__scanner=scanner
     def load_from_scanner(self,wait_for_document=False):
         def scan_img():
-            try:
-                self.__scanner.cancel()
-                self.__scanner.start()
-                return self.__scanner.snap(False)
-            except sane._sane.error as e:
-                if str(e) == 'Document feeder out of documents':
-                    return None
-                if str(e) == 'Device busy':
-                    logger.warn("Scanner busy! Cancling job and retrying!")
+            while True:
+                try:
                     self.__scanner.cancel()
-                #    sleep(3)
-                    return scan_img()
-                else:
-                    self.__scanner.close()
-                    raise
+                    self.__scanner.start()
+                    return self.__scanner.snap(False)
+                except sane._sane.error as e:
+                    if str(e) == 'Document feeder out of documents':
+                        return None
+                    if str(e) == 'Device busy':
+                        logger.warn("Scanner busy! Cancling job and retrying!")
+                        self.__scanner.cancel()
+                    #    sleep(3)
+                    else:
+                        self.__scanner.close()
+                        raise
         
         img=scan_img()
         while img==None and wait_for_document:
