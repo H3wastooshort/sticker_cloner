@@ -19,9 +19,8 @@ def from_file(path):
     img = Image.open(path)
     #img.show("Input Image")
     img = crop_image(config.get("scanner",{}),img)
-    #img.show("Cropped Image")
     img = po.adjust_image(img)
-    img.show("Processed Image")
+    #img.show("Processed Image")
     po.print_image(img,1)
 
 def scanner_loop():
@@ -29,10 +28,11 @@ def scanner_loop():
     po = ZebraOutput.from_config(config.get("printer",{}))
     while True:
         img=si.load_from_scanner(wait_for_document=True)
-        img.show("Scanned Image")
+        #img.show("Scanned Image")
         img = po.adjust_image(img)
+        img = crop_image(config.get("scanner",{}),img)
         img.show("Processed Image")
-        po.print_image(img,1)
+        #po.print_image(img,1)
 if __name__ == "__main__":
     if len(argv) == 2:
         scanner_loop()
