@@ -48,7 +48,7 @@ class ZebraOutput:
         printer_aspect = self.__width > self.__height
         img_aspect = img.width > img.height
         if img_aspect != printer_aspect:
-            img.transpose(Image.Transpose.ROTATE_90)
+            img = img.transpose(Image.Transpose.ROTATE_90)
 
         if img.width > img.height:
             nw = self.__width
