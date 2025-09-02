@@ -21,7 +21,7 @@ def from_file(path):
     img = crop_image(config.get("scanner",{}),img)
     img = po.adjust_image(img)
     #img.show("Processed Image")
-    po.print_image(img,1)
+    po.print_image(img,config.get("copies",1))
 
 def scanner_loop():
     si = ScannerInput.from_config(config.get("scanner",{}))
@@ -32,7 +32,7 @@ def scanner_loop():
         img = po.adjust_image(img)
         img = crop_image(config.get("scanner",{}),img)
         img.show("Processed Image")
-        po.print_image(img,1)
+        po.print_image(img,config.get("copies",1))
 if __name__ == "__main__":
     if len(argv) == 2:
         scanner_loop()

@@ -2,9 +2,10 @@ printer:
   queue: "Zebra-TLP2844"
   label:
     direct_thermal: True
-    height: 30
+    height: 29
     width: 50
     gap: 2.5
     dpu: 8
 scanner:
   threshold: 50
+copies: 1
